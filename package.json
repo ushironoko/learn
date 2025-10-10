@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@ushironoko/gistdex": "^1.6.5"
+  }
+}
