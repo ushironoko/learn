@@ -1,4 +1,7 @@
 {
+  "private": true,
+  "name": "learn",
+  "type": "module",
   "dependencies": {
     "@ushironoko/gistdex": "^1.6.5"
   }
