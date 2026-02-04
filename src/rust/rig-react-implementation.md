@@ -31,7 +31,7 @@ pub trait Tool {
     type Error;
     type Args;
     type Output;
-    
+
     async fn definition(&self, prompt: String) -> ToolDefinition;
     async fn call(&self, args: Self::Args) -> Result<Self::Output, Self::Error>;
 }
@@ -68,10 +68,10 @@ pub fn multi_turn(mut self, depth: usize) -> Self {
 Ok(StreamedAssistantContent::ToolCall(tool_call)) => {
     // ツール実行
     let tool_result = agent.tools.call(
-        &tool_call.function.name, 
+        &tool_call.function.name,
         tool_call.function.arguments.to_string()
     ).await?;
-    
+
     // 結果をチャット履歴に追加
     chat_history.push(Message::User {
         content: OneOrMany::one(UserContent::tool_result(
@@ -79,7 +79,7 @@ Ok(StreamedAssistantContent::ToolCall(tool_call)) => {
             OneOrMany::one(ToolResultContent::text(&tool_result)),
         )),
     });
-    
+
     did_call_tool = true;
 }
 ```
@@ -153,13 +153,13 @@ impl<M: CompletionModel> Prompt for ReasoningAgent<M> {
             .chain_of_thought_extractor
             .extract(prompt)
             .await?;
-        
+
         // 2. 各ステップを文字列化
         let mut reasoning_prompt = String::new();
         for (i, step) in extracted.steps.iter().enumerate() {
             reasoning_prompt.push_str(&format!("Step {}: {}\n", i + 1, step));
         }
-        
+
         // 3. Executorエージェントで実行（multi_turn使用）
         let response = self
             .executor
@@ -167,7 +167,7 @@ impl<M: CompletionModel> Prompt for ReasoningAgent<M> {
             .with_history(&mut chat_history)
             .multi_turn(20)
             .await?;
-        
+
         Ok(response)
     }
 }
@@ -185,7 +185,7 @@ let agent = ReasoningAgent {
         .extractor(anthropic::CLAUDE_3_5_SONNET)
         .preamble("Extract reasoning steps from the prompt")
         .build(),
-    
+
     executor: anthropic_client
         .agent(anthropic::CLAUDE_3_5_SONNET)
         .tool(Add)
@@ -391,7 +391,7 @@ impl Tool for MyTool {
         if args.x == 0 {
             return Err(MyError::InvalidInput);
         }
-        
+
         // 実行
         Ok(perform_operation(args))
     }

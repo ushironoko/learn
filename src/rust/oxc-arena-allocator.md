@@ -143,7 +143,7 @@ struct ChunkFooter {
 [================ データ領域 ================][ChunkFooter]
  ^                                           ^            ^
  data                                        ptr          self
- 
+
 リンクリスト: ChunkFooter.prev -> 前のチャンク -> ... -> 空チャンク (self-loop)
 ```
 
@@ -165,10 +165,10 @@ pub struct Vec<'a, T> {
 impl<'a, T> Vec<'a, T> {
     /// アリーナから新しい Vec を作成
     pub fn new_in(allocator: &'a Allocator) -> Self;
-    
+
     /// 指定された容量で Vec を作成
     pub fn with_capacity_in(capacity: usize, allocator: &'a Allocator) -> Self;
-    
+
     // ... その他の std::vec::Vec と同様のメソッド
 }
 ```
@@ -641,11 +641,11 @@ let handles: Vec<_> = (0..4)
         thread::spawn(move || {
             let guard = pool.get();
             let allocator = guard.allocator();
-            
+
             // アロケータを使用
             let value = allocator.alloc(i * 100);
             println!("Thread {}: {}", i, value);
-            
+
             // guard がドロップされると自動的にプールに返却
         })
     })
